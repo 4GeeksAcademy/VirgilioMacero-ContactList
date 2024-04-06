@@ -13,6 +13,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           initial: "white",
         },
       ],
+      clients: [],
     },
     actions: {
       // Use getActions to call a function within a fuction
@@ -38,7 +39,33 @@ const getState = ({ getStore, getActions, setStore }) => {
         //reset the global store
         setStore({ demo: demo });
       },
+      getContacts: async () => {
+        const contacts = await fetch(
+          "https://playground.4geeks.com/contact/agendas/virgilios_agenda"
+        ).then(async (res) => {
+          if (res.status === 200) {
+            const query = await fetch(
+              "https://playground.4geeks.com/contact/agendas/virgilios_agenda/contacts"
+            );
+            const consult = await query.json();
+
+            setStore({ clients: consult });
+          } else {
+            await fetch(
+              "https://playground.4geeks.com/contact/agendas/virgilios_agenda",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            getActions().getContacts();
+          }
+        });
+      },
     },
+    pepecuadrado: { Holi: "Soy Pepe" },
   };
 };
 

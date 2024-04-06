@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import getState from "./flux.js";
+import getState from "./flux.js";
 
 // Don't change, here is where we initialize our context, by default it's just going to be null.
 export const Context = React.createContext(null);
@@ -9,47 +9,22 @@ export const Context = React.createContext(null);
 const injectContext = (PassedComponent) => {
   const StoreWrapper = (props) => {
     //this will be passed as the contenxt value
-    // const [state, setState] = useState(
-    //   getState({
-    //     getStore: () => state.store,
-    //     getActions: () => state.actions,
-    //     setStore: (updatedStore) =>
-    //       setState({
-    //         store: Object.assign(state.store, updatedStore),
-    //         actions: { ...state.actions },
-    //       }),
-    //   })
-    // );
+    const [state, setState] = useState(
+      getState({
+        getStore: () => state.store,
+        getActions: () => state.actions,
+        setStore: (updatedStore) =>
+          setState({
+            store: Object.assign(state.store, updatedStore),
+            actions: { ...state.actions },
+          }),
+      })
+    );
 
-    const [state, setState] = useState([]);
-
-    async function getContacts() {
-      const contacts = await fetch(
-        "https://playground.4geeks.com/contact/agendas/virgilios_agenda"
-      ).then(async (res) => {
-        if (res.status === 200) {
-          const query = await fetch(
-            "https://playground.4geeks.com/contact/agendas/virgilios_agenda/contacts"
-          );
-          const consult = await query.json();
-          setState(consult);
-        } else {
-          await fetch(
-            "https://playground.4geeks.com/contact/agendas/virgilios_agenda",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          getContacts();
-        }
-      });
-    }
+    // const [state, setState] = useState([]);
 
     useEffect(() => {
-      getContacts();
+      state.actions.getContacts();
     }, []);
 
     // The initial value for the context is not null anymore, but the current state of this component,

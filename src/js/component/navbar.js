@@ -11,10 +11,8 @@ export const Navbar = () => {
           </span>
         </Link>
         <div className="ml-auto">
-          <Link to="/">
-            <button className="btn btn-primary">
-              Check the Context in action
-            </button>
+          <Link to="/addContact">
+            <button className="btn btn-primary">Add New Contact</button>
           </Link>
         </div>
       </div>
