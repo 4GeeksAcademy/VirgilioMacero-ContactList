@@ -13,7 +13,14 @@ const getState = ({ getStore, getActions, setStore }) => {
           initial: "white",
         },
       ],
-      clients: [],
+      clients: [
+        {
+          name: "FIRST",
+          phone: "242342342",
+          email: "asdasd@sdfsd.com",
+          address: "2344 nw",
+        },
+      ],
     },
     actions: {
       // Use getActions to call a function within a fuction
@@ -48,8 +55,7 @@ const getState = ({ getStore, getActions, setStore }) => {
               "https://playground.4geeks.com/contact/agendas/virgilios_agenda/contacts"
             );
             const consult = await query.json();
-
-            setStore({ clients: consult });
+            setStore({ clients: consult.contacts });
           } else {
             await fetch(
               "https://playground.4geeks.com/contact/agendas/virgilios_agenda",
@@ -64,8 +70,43 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
         });
       },
+      removeContact: async (id) => {
+        await fetch(
+          `https://playground.4geeks.com/contact/agendas/virgilios_agenda/contacts/${id}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const store = getStore();
+
+        const contact = store.clients.filter((contact) => contact.id != id);
+
+        setStore({
+          clients: contact,
+        });
+      },
+      CreateContact: async (props) => {
+        const userData = {
+          name: props.name,
+          phone: props.phone,
+          email: props.email,
+          address: props.address,
+        };
+
+        await fetch(
+          "https://playground.4geeks.com/contact/agendas/virgilios_agenda/contacts",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userData),
+          }
+        );
+      },
     },
-    pepecuadrado: { Holi: "Soy Pepe" },
   };
 };
 
