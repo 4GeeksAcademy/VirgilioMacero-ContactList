@@ -1,13 +1,23 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
+import { useLocation } from "react-router-dom";
 
-export default function AddContact() {
+export default function EditContact() {
   const { store, actions } = useContext(Context);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const id = queryParams.get("id");
+  const name = queryParams.get("name");
+  const email = queryParams.get("email");
+  const phone = queryParams.get("phone");
+  const address = queryParams.get("address");
+
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
+    id: id || "",
+    name: name || "",
+    email: email || "",
+    phone: phone || "",
+    address: address || "",
   });
 
   function handleChange(e) {
@@ -18,12 +28,13 @@ export default function AddContact() {
 
   function handleSubmit() {
     if (
+      formData.id != "" &&
       formData.name != "" &&
       formData.email != "" &&
       formData.phone != "" &&
       formData.address != ""
     ) {
-      actions.CreateContact(formData);
+      actions.EditContact(formData);
       window.location.href = "/";
     }
   }

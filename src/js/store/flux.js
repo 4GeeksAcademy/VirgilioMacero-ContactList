@@ -106,6 +106,23 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
         );
       },
+      EditContact: async (props) => {
+        const userData = {
+          name: props.name,
+          phone: props.phone,
+          email: props.email,
+          address: props.address,
+        };
+
+        await fetch(
+          `https://playground.4geeks.com/contact/agendas/virgilios_agenda/contacts/${props.id}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userData),
+          }
+        );
+      },
     },
   };
 };
